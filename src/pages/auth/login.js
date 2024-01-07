@@ -1,27 +1,23 @@
-import { useCallback, useState } from 'react';
-import Head from 'next/head';
-import NextLink from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import {
-  Alert,
   Box,
   Button,
   FormControl,
-  FormHelperText,
   InputLabel,
   Link,
   MenuItem,
   Stack,
-  Tab,
-  Tabs,
   TextField,
   Typography
 } from '@mui/material';
+import Select from '@mui/material/Select';
+import { useFormik } from 'formik';
+import Head from 'next/head';
+import NextLink from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import * as Yup from 'yup';
 
 const Page = () => {
   const router = useRouter();
@@ -34,8 +30,8 @@ const Page = () => {
   const [method, setMethod] = useState('email');
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123!',
+      email: '',
+      password: '',
       submit: null
     },
     validationSchema: Yup.object({
@@ -51,10 +47,10 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signIn(values.email, values.password);
-        if (userType === "Admin") {
+        await auth.signIn(values.email, values.password, userType);
+        if (userType === "admin") {
           router.push('/admin');
-        } else if (userType === "Customer") {
+        } else if (userType === "user") {
           router.push('/customer');
         }
       } catch (err) {
@@ -70,14 +66,6 @@ const Page = () => {
       setMethod(value);
     },
     []
-  );
-
-  const handleSkip = useCallback(
-    () => {
-      auth.skip();
-      router.push('/');
-    },
-    [auth, router]
   );
 
   return (
@@ -165,12 +153,10 @@ const Page = () => {
                       label="Tipe User"
                       onChange={handleChange}
                     >
-                      <MenuItem value={"Admin"}>Admin</MenuItem>
-                      <MenuItem value={"Customer"}>Customer</MenuItem>
+                      <MenuItem value={"admin"}>Admin</MenuItem>
+                      <MenuItem value={"user"}>Customer</MenuItem>
                     </Select>
                   </FormControl>
-
-
                 </Stack>
                 {formik.errors.submit && (
                   <Typography

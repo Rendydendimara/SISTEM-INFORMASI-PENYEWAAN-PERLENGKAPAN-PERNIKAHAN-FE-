@@ -6,8 +6,25 @@ import * as Yup from 'yup';
 import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import ToastMessage from 'src/components/atoms/ToastMessage';
+import { useState } from 'react';
 
 const Page = () => {
+  const [errMsg, setErrMsg] = useState({
+    status: 'success',
+    msg: '',
+    isOpen: false
+  })
+  const handleCloseErrMsg = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrMsg({
+      status: 'success',
+      msg: '',
+      isOpen: false
+    })
+  };
   const router = useRouter();
   const auth = useAuth();
   const formik = useFormik({
@@ -34,8 +51,8 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signUp(values.email, values.name, values.password);
-        router.push('/');
+        await auth.signUp({ alamat: '', nomorTelepon: '', email: values.email, username: values.name, password: values.password });
+        router.push('/auth/login');
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -151,6 +168,13 @@ const Page = () => {
           </div>
         </Box>
       </Box>
+      <ToastMessage
+        open={errMsg.isOpen}
+        status={errMsg.status}
+        message={errMsg.msg}
+        onClose={handleCloseErrMsg}
+      />
+
     </>
   );
 };

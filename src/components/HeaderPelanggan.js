@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import Link from 'next/link';
+import { useAuth } from 'src/hooks/use-auth';
 
 const pages = [{ title: 'Paket', link: '/customer' }, { title: 'Pesanan', link: '/customer/pesanan' }];
 const settings = [{ title: 'Profile', link: '/customer/account' }, { title: 'Keluar', link: '/logout' }];
@@ -20,6 +21,8 @@ const settings = [{ title: 'Profile', link: '/customer/account' }, { title: 'Kel
 function HeaderPelanggan() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const auth = useAuth();
+  const [username, setUsername] = React.useState('')
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -35,6 +38,10 @@ function HeaderPelanggan() {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  React.useEffect(() => {
+    setUsername(auth.user.username || auth.user.name)
+  }, [auth])
 
   return (
     <AppBar position="static">
@@ -152,7 +159,13 @@ function HeaderPelanggan() {
             ))}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Typography
+                  variant="h6"
+                  noWrap
+                  color="white"
+                >
+                  {username}
+                </Typography>
               </IconButton>
             </Tooltip>
             <Menu
@@ -176,7 +189,6 @@ function HeaderPelanggan() {
                   <Link style={{ textDecoration: 'unset' }} href={setting.link}>
                     <Typography textAlign="center">{setting.title}</Typography>
                   </Link>
-
                 </MenuItem>
               ))}
             </Menu>

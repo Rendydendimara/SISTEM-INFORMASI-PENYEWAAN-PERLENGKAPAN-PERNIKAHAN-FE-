@@ -37,6 +37,7 @@ export const CustomersTable = (props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  let index = 0;
 
   const {
     count = 0,
@@ -51,9 +52,6 @@ export const CustomersTable = (props) => {
     rowsPerPage = 0,
     selected = []
   } = props;
-
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
 
   return (
     <Card>
@@ -79,9 +77,8 @@ export const CustomersTable = (props) => {
             </TableHead>
             <TableBody>
               {items.map((customer, i) => {
+                index++;
                 const isSelected = selected.includes(customer.id);
-                const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-
                 return (
                   <TableRow
                     hover
@@ -89,11 +86,11 @@ export const CustomersTable = (props) => {
                     selected={isSelected}
                   >
                     <TableCell>
-                      {i + 1}
+                      {customer.no}
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle2">
-                        {customer.name}
+                        {customer.nama}
                       </Typography>
                     </TableCell>
                     <TableCell>
@@ -107,10 +104,10 @@ export const CustomersTable = (props) => {
                         justifyContent="center"
                         spacing={2}
                       >
-                        <Link href={`/admin/data-paket/detail?id=${'123'}`}>
+                        <Link href={`/admin/data-paket/detail?id=${customer.id}`}>
                           <Button variant="contained" color='success'>Detail</Button>
                         </Link>
-                        <Link href={`/admin/data-paket/tambah?action=edit&id=${'123'}`}>
+                        <Link href={`/admin/data-paket/tambah?action=edit&id=${customer.id}`}>
                           <Button variant="contained" color='info'>Edit</Button>
                         </Link>
                         <Button onClick={handleOpen} variant="contained" color='error'>Hapus</Button>

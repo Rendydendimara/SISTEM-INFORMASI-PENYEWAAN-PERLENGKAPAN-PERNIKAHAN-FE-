@@ -32,7 +32,8 @@ export const AuthGuard = (props) => {
         router
           .replace({
             pathname: '/auth/login',
-            query: router.asPath !== '/' ? { continueUrl: router.asPath } : undefined
+            // query: router.asPath !== '/' ? { continueUrl: router.asPath } : undefined
+            query: router.asPath !== '/' ? undefined : undefined
           })
           .catch(console.error);
       } else {

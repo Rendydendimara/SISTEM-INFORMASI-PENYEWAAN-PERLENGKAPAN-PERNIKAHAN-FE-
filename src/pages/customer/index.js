@@ -1,22 +1,48 @@
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { ApiGetListPaket } from 'src/api/paket';
+import ToastMessage from 'src/components/atoms/ToastMessage';
 import CardPaket from 'src/components/molecules/CardPaket';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 
 const now = new Date();
 
 const PelangganIndexPage = () => {
-  const [dataPaket, setDataPaket] = useState([
-    {
-      nama: 'Paket A',
-      harga: 1000000,
-      id: 1,
-      deskripsi: `Lizards are a widespread group of squamate reptiles, with over 6,000
-      species, ranging across all continents except Antarctica. Lizards are a widespread group of squamate reptiles, with over 6,000
-      species, ranging across all continents except Antarctica`,
+  const [errMsg, setErrMsg] = useState({
+    status: 'success',
+    msg: '',
+    isOpen: false
+  })
+  const handleCloseErrMsg = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
     }
-  ]);
+    setErrMsg({
+      status: 'success',
+      msg: '',
+      isOpen: false
+    })
+  };
+
+  const [dataPaket, setDataPaket] = useState([]);
+
+  const getPaket = async () => {
+    const res = await ApiGetListPaket()
+    if (res.status === 200) {
+      setDataPaket(res.data.data)
+    } else {
+      setErrMsg({
+        status: 'error',
+        msg: `Gagal get data paket. ${res.data.message}`,
+        isOpen: true
+      })
+    }
+  }
+
+  useEffect(() => {
+    getPaket()
+  }, [])
 
   return (
     <>
@@ -37,19 +63,26 @@ const PelangganIndexPage = () => {
             container
             spacing={3}
           >
-            {[1, 2, 3, 4, 5, 6].map((dt, i) => (
+            {dataPaket.map((dt, i) => (
               <Grid
                 key={i}
                 xs={12}
                 sm={6}
                 lg={3}
               >
-                <CardPaket data={dataPaket[0]} />
+                <CardPaket data={dt} />
               </Grid>
             ))}
           </Grid>
         </Container>
       </Box>
+      <ToastMessage
+        open={errMsg.isOpen}
+        status={errMsg.status}
+        message={errMsg.msg}
+        onClose={handleCloseErrMsg}
+      />
+
     </>
   )
 

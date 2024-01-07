@@ -20,6 +20,9 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useState } from 'react';
 import Link from 'next/link';
+import moment from 'moment';
+import { SeverityPill } from 'src/components/severity-pill';
+import { statusMap, statusMapToTitle } from '../overview/overview-latest-orders';
 
 const style = {
   position: 'absolute',
@@ -89,35 +92,35 @@ export const PesananTable = (props) => {
             <TableBody>
               {items.map((customer, i) => {
                 const isSelected = selected.includes(customer.id);
-                const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-
                 return (
                   <TableRow
                     hover
-                    key={customer.id}
+                    key={customer.idPesanan}
                     selected={isSelected}
                   >
                     <TableCell>
-                      {i + 1}
+                      {customer.no}
                     </TableCell>
                     <TableCell>
-                      DEV1044
+                      {customer.idPesanan}
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle2">
-                        {customer.name}
+                        {customer.namaPesanan}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle2">
-                        VVIP
+                        {customer.namaPaket}
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      {new Date().toDateString()}
+                      {moment(customer.waktu_penggunaan).format('LL')}
                     </TableCell>
                     <TableCell>
-                      (Akan digunakan, Sedang digunakan, Selesai, Batal)
+                      <SeverityPill color={statusMap[customer.statusPesanan]}>
+                        {statusMapToTitle[customer.statusPesanan]}
+                      </SeverityPill>
                     </TableCell>
                     <TableCell>
                       <Stack
@@ -127,7 +130,7 @@ export const PesananTable = (props) => {
                         justifyContent="center"
                         spacing={2}
                       >
-                        <Link href={props.type === 'customer' ? `/customer/pesanan/detail?id=${'123'}` : `/admin/pesanan/detail?id=${'123'}`}>
+                        <Link href={props.type === 'customer' ? `/customer/pesanan/detail?id=${customer.id}` : `/admin/pesanan/detail?id=${customer.idPesanan}`}>
                           <Button variant="contained" color='success'>Detail</Button>
                         </Link>
                       </Stack>

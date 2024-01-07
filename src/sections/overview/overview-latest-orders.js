@@ -19,17 +19,17 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { SeverityPill } from 'src/components/severity-pill';
 
 export const statusMap = {
-  akanDigunakan: 'warning',
-  sedangDigunakan: 'info',
-  selesai: 'success',
-  batal: 'error'
+  'Akan Digunakan': 'warning',
+  'Sedang Digunakan': 'info',
+  'Selesai': 'success',
+  'Batal': 'error'
 };
 
 export const statusMapToTitle = {
-  akanDigunakan: 'Akan Digunakan',
-  sedangDigunakan: 'Sedang Digunakan',
-  selesai: 'Selesai',
-  batal: 'Batal'
+  'Akan Digunakan': 'Akan Digunakan',
+  'Sedang Digunakan': 'Sedang Digunakan',
+  'Selesai': 'Selesai',
+  'Batal': 'Batal'
 };
 
 export const OverviewLatestOrders = (props) => {

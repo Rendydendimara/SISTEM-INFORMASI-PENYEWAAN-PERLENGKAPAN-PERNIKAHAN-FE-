@@ -83,7 +83,6 @@ export const PelangganTable = (props) => {
             <TableBody>
               {items.map((customer, i) => {
                 const isSelected = selected.includes(customer.id);
-                const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
 
                 return (
                   <TableRow
@@ -92,26 +91,27 @@ export const PelangganTable = (props) => {
                     selected={isSelected}
                   >
                     <TableCell>
-                      {i + 1}
+                      {customer.no}
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle2">
-                        {customer.name}
+                        {customer.username}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle2">
-                        email@gmail.com
+                        {customer.email}
+
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle2">
-                        0822222222
+                        {customer.nomor_telepon}
                       </Typography>
                     </TableCell>
                     <TableCell>
                       <Typography variant="subtitle2">
-                        Kamalaputi
+                        {customer.alamat}
                       </Typography>
                     </TableCell>
                   </TableRow>

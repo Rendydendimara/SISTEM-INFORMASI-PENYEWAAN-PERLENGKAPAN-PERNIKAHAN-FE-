@@ -10,50 +10,64 @@ import {
   TextField,
   Unstable_Grid2 as Grid
 } from '@mui/material';
+import { useAuth } from 'src/hooks/use-auth';
+import { ApiUpdateUser } from 'src/api/auth';
+import ToastMessage from 'src/components/atoms/ToastMessage';
 
-const states = [
-  {
-    value: 'alabama',
-    label: 'Alabama'
-  },
-  {
-    value: 'new-york',
-    label: 'New York'
-  },
-  {
-    value: 'san-francisco',
-    label: 'San Francisco'
-  },
-  {
-    value: 'los-angeles',
-    label: 'Los Angeles'
-  }
-];
 
 export const AccountProfileCustomer = () => {
+  const auth = useAuth();
+  const [errMsg, setErrMsg] = useState({
+    status: 'success',
+    msg: '',
+    isOpen: false
+  })
+  const handleCloseErrMsg = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrMsg({
+      status: 'success',
+      msg: '',
+      isOpen: false
+    })
+  };
   const [values, setValues] = useState({
-    username: 'Anika',
-    email: 'demo@devias.io',
-    phone: '',
-    alamat: '',
+    username: auth.user.username || auth.user.name,
+    email: auth.user.email,
+    phone: auth.user.nomor_telepon,
+    alamat: auth.user.alamat,
   });
 
-  const handleChange = useCallback(
+  const handleChange =
     (event) => {
       setValues((prevState) => ({
         ...prevState,
         [event.target.name]: event.target.value
       }));
-    },
-    []
-  );
+    }
 
-  const handleSubmit = useCallback(
-    (event) => {
+  const handleSubmit =
+    async (event) => {
       event.preventDefault();
-    },
-    []
-  );
+      const res = await ApiUpdateUser({
+        username: values.username, alamat: values.alamat, nomorTelepon: values.phone, id: auth.user.id
+      })
+      if (res.status === 200) {
+        setErrMsg({
+          status: 'success',
+          msg: `Berhasil Update Profile`,
+          isOpen: true
+        })
+
+      } else {
+        setErrMsg({
+          status: 'error',
+          msg: `Error. ${res.data.message}`,
+          isOpen: true
+        })
+      }
+    }
 
   return (
     <form
@@ -94,7 +108,7 @@ export const AccountProfileCustomer = () => {
                   label="Alamat email"
                   name="email"
                   onChange={handleChange}
-                  required
+                  disabled
                   value={values.email}
                 />
               </Grid>
@@ -130,11 +144,18 @@ export const AccountProfileCustomer = () => {
         </CardContent>
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button variant="contained">
+          <Button onClick={handleSubmit} variant="contained">
             Simpan
           </Button>
         </CardActions>
       </Card>
+      <ToastMessage
+        open={errMsg.isOpen}
+        status={errMsg.status}
+        message={errMsg.msg}
+        onClose={handleCloseErrMsg}
+      />
+
     </form>
   );
 };

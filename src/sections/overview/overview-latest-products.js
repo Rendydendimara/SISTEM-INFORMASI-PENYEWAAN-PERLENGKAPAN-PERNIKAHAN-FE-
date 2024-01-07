@@ -66,7 +66,7 @@ export const OverviewLatestProducts = (props) => {
                 secondary={`Dibuat ${ago} hari lalu`}
                 secondaryTypographyProps={{ variant: 'body2' }}
               />
-              <Link href={'/admin/data-paket/detail?id=123'}>
+              <Link href={`/admin/data-paket/detail?id=${product.id}`}>
                 <IconButton edge="end">
                   <SvgIcon>
                     <VisibilityIcon />

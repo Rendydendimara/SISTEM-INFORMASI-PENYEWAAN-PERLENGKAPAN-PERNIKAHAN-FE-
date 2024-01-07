@@ -8,7 +8,7 @@ export const axiosWithToken = (options = {}) => {
   const config = token
     ? {
       headers: {
-        'si_investasi_barang': token,
+        'si_penyewaan_pernikahan': token,
       },
     }
     : {};

@@ -13,9 +13,9 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
+  FormLabel
 } from '@mui/material';
-
 import Head from 'next/head';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
 import { subDays, subHours } from 'date-fns';
@@ -25,169 +25,9 @@ import { applyPagination } from 'src/utils/apply-pagination';
 import InputFileDropDown from 'src/components/atoms/InputFileDropDown';
 import CloseIcon from '@mui/icons-material/Close';
 import { useSearchParams } from 'next/navigation';
-
-const now = new Date();
-
-const data = [
-  {
-    id: '5e887ac47eed253091be10cb',
-    address: {
-      city: 'Cleveland',
-      country: 'USA',
-      state: 'Ohio',
-      street: '2849 Fulton Street'
-    },
-    avatar: '/assets/avatars/avatar-carson-darrin.png',
-    createdAt: subDays(subHours(now, 7), 1).getTime(),
-    email: 'carson.darrin@devias.io',
-    name: 'Carson Darrin',
-    phone: '304-428-3097'
-  },
-  {
-    id: '5e887b209c28ac3dd97f6db5',
-    address: {
-      city: 'Atlanta',
-      country: 'USA',
-      state: 'Georgia',
-      street: '1865  Pleasant Hill Road'
-    },
-    avatar: '/assets/avatars/avatar-fran-perez.png',
-    createdAt: subDays(subHours(now, 1), 2).getTime(),
-    email: 'fran.perez@devias.io',
-    name: 'Fran Perez',
-    phone: '712-351-5711'
-  },
-  {
-    id: '5e887b7602bdbc4dbb234b27',
-    address: {
-      city: 'North Canton',
-      country: 'USA',
-      state: 'Ohio',
-      street: '4894  Lakeland Park Drive'
-    },
-    avatar: '/assets/avatars/avatar-jie-yan-song.png',
-    createdAt: subDays(subHours(now, 4), 2).getTime(),
-    email: 'jie.yan.song@devias.io',
-    name: 'Jie Yan Song',
-    phone: '770-635-2682'
-  },
-  {
-    id: '5e86809283e28b96d2d38537',
-    address: {
-      city: 'Madrid',
-      country: 'Spain',
-      name: 'Anika Visser',
-      street: '4158  Hedge Street'
-    },
-    avatar: '/assets/avatars/avatar-anika-visser.png',
-    createdAt: subDays(subHours(now, 11), 2).getTime(),
-    email: 'anika.visser@devias.io',
-    name: 'Anika Visser',
-    phone: '908-691-3242'
-  },
-  {
-    id: '5e86805e2bafd54f66cc95c3',
-    address: {
-      city: 'San Diego',
-      country: 'USA',
-      state: 'California',
-      street: '75247'
-    },
-    avatar: '/assets/avatars/avatar-miron-vitold.png',
-    createdAt: subDays(subHours(now, 7), 3).getTime(),
-    email: 'miron.vitold@devias.io',
-    name: 'Miron Vitold',
-    phone: '972-333-4106'
-  },
-  {
-    id: '5e887a1fbefd7938eea9c981',
-    address: {
-      city: 'Berkeley',
-      country: 'USA',
-      state: 'California',
-      street: '317 Angus Road'
-    },
-    avatar: '/assets/avatars/avatar-penjani-inyene.png',
-    createdAt: subDays(subHours(now, 5), 4).getTime(),
-    email: 'penjani.inyene@devias.io',
-    name: 'Penjani Inyene',
-    phone: '858-602-3409'
-  },
-  {
-    id: '5e887d0b3d090c1b8f162003',
-    address: {
-      city: 'Carson City',
-      country: 'USA',
-      state: 'Nevada',
-      street: '2188  Armbrester Drive'
-    },
-    avatar: '/assets/avatars/avatar-omar-darboe.png',
-    createdAt: subDays(subHours(now, 15), 4).getTime(),
-    email: 'omar.darobe@devias.io',
-    name: 'Omar Darobe',
-    phone: '415-907-2647'
-  },
-  {
-    id: '5e88792be2d4cfb4bf0971d9',
-    address: {
-      city: 'Los Angeles',
-      country: 'USA',
-      state: 'California',
-      street: '1798  Hickory Ridge Drive'
-    },
-    avatar: '/assets/avatars/avatar-siegbert-gottfried.png',
-    createdAt: subDays(subHours(now, 2), 5).getTime(),
-    email: 'siegbert.gottfried@devias.io',
-    name: 'Siegbert Gottfried',
-    phone: '702-661-1654'
-  },
-  {
-    id: '5e8877da9a65442b11551975',
-    address: {
-      city: 'Murray',
-      country: 'USA',
-      state: 'Utah',
-      street: '3934  Wildrose Lane'
-    },
-    avatar: '/assets/avatars/avatar-iulia-albu.png',
-    createdAt: subDays(subHours(now, 8), 6).getTime(),
-    email: 'iulia.albu@devias.io',
-    name: 'Iulia Albu',
-    phone: '313-812-8947'
-  },
-  {
-    id: '5e8680e60cba5019c5ca6fda',
-    address: {
-      city: 'Salt Lake City',
-      country: 'USA',
-      state: 'Utah',
-      street: '368 Lamberts Branch Road'
-    },
-    avatar: '/assets/avatars/avatar-nasimiyu-danai.png',
-    createdAt: subDays(subHours(now, 1), 9).getTime(),
-    email: 'nasimiyu.danai@devias.io',
-    name: 'Nasimiyu Danai',
-    phone: '801-301-7894'
-  }
-];
-
-const useCustomers = (page, rowsPerPage) => {
-  return useMemo(
-    () => {
-      return applyPagination(data, page, rowsPerPage);
-    },
-    [page, rowsPerPage]
-  );
-};
-
-const useCustomerIds = (customers) => {
-  return useMemo(
-    () => {
-      return customers.map((customer) => customer.id);
-    },
-    [customers]
-  );
-};
+import { ApiCreatePaket, ApiGetDetailPaket, ApiUpdatePaket } from 'src/api/paket';
+import ToastMessage from 'src/components/atoms/ToastMessage';
+import Dropzone from 'react-dropzone';
 
 // Convert string price format into number
 export const convertPriceStringToNumber = (
@@ -217,6 +57,21 @@ export const toFormatPrice = (
 
 
 const Page = () => {
+  const [errMsg, setErrMsg] = useState({
+    status: 'success',
+    msg: '',
+    isOpen: false
+  })
+  const handleCloseErrMsg = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setErrMsg({
+      status: 'success',
+      msg: '',
+      isOpen: false
+    })
+  };
   const [selectedIdUpdate, setSelectedIdUpdate] = useState()
   const [formState, setFormState] = useState('add');
   const searchParams = useSearchParams();
@@ -232,113 +87,263 @@ const Page = () => {
     mejaDanKursiAkad: '',
     tendaTerimaTamu: '',
     mejaTerimaTamu: '',
+    image1: undefined,
+    image2: undefined,
+    image3: undefined,
   });
-  const [listPhotoExistAlbumUpdated, setListPhotoExistAlbumUpdated] = ([]);
-  const [listPhoto, setListPhoto] = useState([]);
+  const [imageProduk, setImageProduk] = useState({
+    image1: undefined,
+    image2: undefined,
+    image3: undefined,
+  });
+  const [imgUrl, setImgUrl] = useState({
+    image1: '',
+    image2: '',
+    image3: '',
+  });
 
-  const handleChange = useCallback(
-    (event) => {
-      console.log(event.target.name)
-      setValues((prevState) => ({
-        ...prevState,
-        [event.target.name]: event.target.value
-      }));
-    },
-    []
-  );
 
-  const handleSubmit = useCallback(
-    (event) => {
-      event.preventDefault();
-    },
-    []
-  );
+  const handleDrop = (key, files) => {
+    const file = files[0];
+    // looping for validation file before upload
+    const fileName = file.name.match(/\.[0-9a-z]+$/i)[0];
+    const fileFormat = fileName.substring(1, fileName.length);
+    const isImage =
+      ['jpg', 'jpeg', 'png'].includes(fileFormat.toLowerCase()) ?? false;
 
-  const handleDrop = (data) => {
-    console.log('data', data)
-    if (data.length <= 3) {
-      const MAX_SIZE_FILE_UPLOAD = 5034166; // 5mb
-      let errorFileSize = false;
-      let errorFileFormat = false;
-
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].size > MAX_SIZE_FILE_UPLOAD) errorFileSize = true;
-        const fileName = data[i].name.match(/\.[0-9a-z]+$/i)[0];
-        const fileFormat = fileName.substring(1, fileName.length);
-        if (!(['jpg', 'jpeg', 'png', 'svg', 'gif'].includes(fileFormat.toLowerCase()))) errorFileFormat = true
-      }
-
-      if (errorFileFormat) {
-        // toast({
-        //   position: 'bottom',
-        //   title: MESSAGE_FILE_INVALID_FORMAT.title,
-        //   description: MESSAGE_FILE_INVALID_FORMAT.message,
-        //   status: 'error',
-        //   duration: 8000,
-        //   isClosable: true,
-        // });
-        return;
-      }
-      if (errorFileSize) {
-        // toast({
-        //   position: 'bottom',
-        //   title: MESSAGE_FILE_MAXIMUM_SIZE.title,
-        //   description: MESSAGE_FILE_MAXIMUM_SIZE.message("1"),
-        //   status: 'error',
-        //   duration: 8000,
-        //   isClosable: true,
-        // });
-        return;
-      } else {
-        console.log('data', data)
-        setListPhoto([...listPhoto, ...data]);
-      }
-
+    if (!isImage) {
+      setErrMsg({
+        status: 'error',
+        msg: 'File harus gambar format png, jpg, jpeg',
+        isOpen: false
+      })
+      return;
     }
+    setValues({
+      ...values,
+      [key]: file,
+    });
+    setImageProduk({
+      ...imageProduk,
+      [key]: file,
+    });
   };
 
 
-  const removeListImage = (index) => {
-    setListPhoto([
-      ...listPhoto.slice(0, index),
-      ...listPhoto.slice(index + 1, listPhoto.length),
-    ])
+  const handleChange =
+    (event) => {
+      setValues({
+        ...values,
+        [event.target.name]: event.target.value
+      });
+    }
+  const handleSubmit =
+    async (event) => {
+      event.preventDefault();
+      if (formState === 'add') {
+        const res = await ApiCreatePaket({
+          nama: values.namaPaket,
+          harga: values.harga,
+          makeUp: values.makeUp,
+          gaunWanita: values.gaunWanita,
+          kemejaPria: values.kemejaPria,
+          dekorKamarPengantin: values.dekorKamarPengantin,
+          dekorPanggung: values.dekorPanggung,
+          mejaKursiAkad: values.mejaDanKursiAkad,
+          tendaTerimaTamu: values.tendaTerimaTamu,
+          mejaTerimaTamu: values.mejaTerimaTamu,
+          image1: values.image1,
+          image2: values.image2,
+          image3: values.image3
+        })
+        if (res.status === 200) {
+          setErrMsg({
+            status: 'success',
+            msg: 'Berhasil membuat paket',
+            isOpen: true
+          })
+          resetForm()
+        } else {
+          setErrMsg({
+            status: 'error',
+            msg: `Gagal membuat paket. ${res.data.message}`,
+            isOpen: true
+          })
+        }
+      } else {
+        let oldImages = [];
+        if (!values.image1) {
+          oldImages.push(imgUrl.image1);
+        }
+        if (!values.image2) {
+          oldImages.push(imgUrl.image2);
+        }
+        if (!values.image3) {
+          oldImages.push(imgUrl.image3);
+        }
+        const res = await ApiUpdatePaket({
+          nama: values.namaPaket,
+          harga: values.harga,
+          makeUp: values.makeUp,
+          gaunWanita: values.gaunWanita,
+          kemejaPria: values.kemejaPria,
+          dekorKamarPengantin: values.dekorKamarPengantin,
+          dekorPanggung: values.dekorPanggung,
+          mejaKursiAkad: values.mejaDanKursiAkad,
+          tendaTerimaTamu: values.tendaTerimaTamu,
+          mejaTerimaTamu: values.mejaTerimaTamu,
+          image1: values.image1,
+          image2: values.image2,
+          image3: values.image3,
+          id: selectedIdUpdate,
+          oldImages: JSON.stringify(oldImages),
+        })
+        if (res.status === 200) {
+          setErrMsg({
+            status: 'success',
+            msg: 'Berhasil update paket',
+            isOpen: true
+          })
+          // resetForm()
+        } else {
+          setErrMsg({
+            status: 'error',
+            msg: `Gagal update paket. ${res.data.message}`,
+            isOpen: true
+          })
+        }
+
+      }
+    }
+
+  const thumbs = (key) => {
+    if (imageProduk[key]) {
+      const url = URL.createObjectURL(imageProduk[key]);
+
+      return (
+        <Box>
+          <img
+            src={url}
+            style={{
+              width: '200px',
+              height: '200px',
+              objectFit: 'contain',
+              objectPosition: 'center',
+              placeholder: 'blur',
+            }}
+          />
+          <Button w='full' size='xs' onClick={() => handleRemoveImages(key)}>
+            Hapus
+          </Button>
+        </Box>
+      );
+    }
+    if (imgUrl[key]) {
+      return (
+        <Box>
+          <img
+            src={imgUrl[key]}
+            style={{
+              width: '200px',
+              height: '200px',
+              objectFit: 'contain',
+              objectPosition: 'center',
+              placeholder: 'blur',
+            }}
+          />
+          <Button w='full' size='xs' onClick={() => handleRemoveImages(key)}>
+            Hapus
+          </Button>
+        </Box>
+      );
+    }
+    return <></>;
+  };
+
+  const handleRemoveImages = (key) => {
+    setImageProduk({
+      ...imageProduk,
+      [key]: undefined,
+    });
+    setValues({
+      ...values,
+      [key]: undefined,
+    });
+    setImgUrl({
+      ...imgUrl,
+      [key]: '',
+    });
+  };
+
+  const resetForm = (key) => {
+    setImageProduk({
+      ...imageProduk,
+      [key]: undefined,
+    });
+    setValues({
+      ...values,
+      [key]: undefined,
+    });
+    setImgUrl({
+      ...imgUrl,
+      [key]: '',
+    });
+    setValues({
+      namaPaket: '',
+      harga: '',
+      status: '',
+      makeUp: '',
+      gaunWanita: '',
+      kemejaPria: '',
+      dekorKamarPengantin: '',
+      dekorPanggung: '',
+      mejaDanKursiAkad: '',
+      tendaTerimaTamu: '',
+      mejaTerimaTamu: '',
+      image1: undefined,
+      image2: undefined,
+      image3: undefined,
+    });
+  };
+
+  const disableForm = () => {
+    if (values.dekorKamarPengantin && values.dekorPanggung && values.gaunWanita && values.harga && values.kemejaPria && values.makeUp && values.mejaDanKursiAkad && values.mejaTerimaTamu && values.namaPaket) return false
+    return true
   }
 
-  const renderPreviewImage = () => {
-    let urlImages = []
-    listPhoto.forEach((dt) => {
-      urlImages.push(URL.createObjectURL(dt))
-    })
-
-    return (
-      <Box display="flex" alignItems="flex-start" gap="10px">
-        {urlImages.map((url, i) => (
-          <Box position='relative' w='fit-content' key={i}>
-            <CloseIcon style={{
-              position: 'absolute',
-              right: 0,
-              top: 0,
-              cursor: 'pointer',
-            }}
-              onClick={() => removeListImage(i)}
-            />
-            <img
-              src={url}
-              style={{
-                width: '165px',
-                height: '210px',
-                objectFit: 'contain',
-                objectPosition: 'center',
-                borderRadius: '8px',
-
-              }}
-            />
-          </Box>
-        ))}
-      </Box>
-    );
-  };
+  const onOpenUpdateData = async (id) => {
+    const res = await ApiGetDetailPaket(id)
+    if (res.status === 200) {
+      setValues({
+        namaPaket: res.data.data.nama,
+        harga: res.data.data.harga,
+        // status: res.data.data.nama,
+        makeUp: res.data.data.make_up,
+        gaunWanita: res.data.data.gaun_wanita,
+        kemejaPria: res.data.data.kemeja_pria,
+        dekorKamarPengantin: res.data.data.dekor_kamar_pengantin,
+        dekorPanggung: res.data.data.dekor_panggung,
+        mejaDanKursiAkad: res.data.data.meja_kursi_akad,
+        tendaTerimaTamu: res.data.data.tenda_terima_tamu,
+        mejaTerimaTamu: res.data.data.meja_terima_tamu,
+        image1: undefined,
+        image2: undefined,
+        image3: undefined,
+      });
+      let imgs = res.data.data?.gambar?.split(",") ?? []
+      setImgUrl({
+        image1: imgs[0] ? imgs[0].length > 5 ? imgs[0] : '' : '',
+        image2: imgs[1] ? imgs[1].length > 5 ? imgs[1] : '' : '',
+        image3: imgs[2] ? imgs[2].length > 5 ? imgs[2] : '' : '',
+      });
+    } else {
+      setErrMsg({
+        status: 'error',
+        msg: `Error. ${res.data.message}`,
+        isOpen: true
+      })
+    }
+  }
 
   useEffect(() => {
     const action = searchParams.get('action');
@@ -346,7 +351,7 @@ const Page = () => {
     if (action === 'edit' && id) {
       setSelectedIdUpdate(id);
       setFormState('update');
-      // onOpenUpdateData(id);
+      onOpenUpdateData(id);
     }
   }, [searchParams]);
 
@@ -386,7 +391,7 @@ const Page = () => {
                     onChange={handleChange}
                     required
                     style={{ marginBottom: '15px' }}
-                  // value={values.firstName}
+                    value={values.namaPaket}
                   />
                   <TextField
                     fullWidth
@@ -405,7 +410,7 @@ const Page = () => {
                       })
                     }
                   />
-                  <FormControl fullWidth style={{ marginBottom: '15px' }}
+                  {/* <FormControl fullWidth style={{ marginBottom: '15px' }}
                     sx={{ m: 1, minWidth: 120 }} size="medium">
                     <InputLabel id="demo-select-small-label">Status</InputLabel>
                     <Select
@@ -413,13 +418,13 @@ const Page = () => {
                       id="demo-select-small"
                       value={values.status}
                       label="Tipe User"
-                      name="status "
+                      name="status"
                       onChange={handleChange}
                     >
-                      <MenuItem value={"Siap dipakai"}>Siap dipakai</MenuItem>
+                      <MenuItem value={"Siap dipakai"}>Tersedia</MenuItem>
                       <MenuItem value={"Dalam pemakaian"}>Dalam pemakaian</MenuItem>
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
                   <Grid
                     container
                     spacing={3}
@@ -436,7 +441,7 @@ const Page = () => {
                         rows={3}
                         onChange={handleChange}
                         required
-                      // value={values.firstName}
+                        value={values.makeUp}
                       />
                     </Grid>
                     <Grid
@@ -545,35 +550,102 @@ const Page = () => {
                     </Grid>
                   </Grid>
                   <Box mt="20px">
-                    {listPhoto.length === 0 && (
-                      <InputFileDropDown
-                        label="Tambahkan gambar (maksimal 3)"
-                        handleDrop={handleDrop}
-                        acceptFile={{
-                          'image/png': [],
-                          'image/jpeg': [],
-                          'image/jpg': [],
-                          'image/svg+xml': [],
-                          'image/gif': [],
-                        }}
-                      />
-                    )}
-                    {listPhoto.length > 0 && (
-                      renderPreviewImage()
-                    )}
+                    <FormControl isRequired my='3'>
+                      <FormLabel >
+                        Gambar (Maksimal 3 gambar)
+                      </FormLabel>
+                      <Box display="flex" gap='10px' alignItems='center'>
+                        {imageProduk.image1 || imgUrl.image1 ? (
+                          <Box my='5'>{thumbs('image1')}</Box>
+                        ) : (
+                          <Dropzone
+                            onDrop={(file) => handleDrop('image1', file)}
+                            multiple={false}
+                          >
+                            {({ getRootProps, getInputProps }) => (
+                              <section className='container'>
+                                <div
+                                  {...getRootProps({ className: 'dropzone' })}
+                                  className='dropzone'
+                                >
+                                  <input {...getInputProps()} />
+                                  <p>
+                                    Seret 'dan' jatuhkan gambar profile di sini,
+                                    atau klik untuk memilih file
+                                  </p>
+                                </div>
+                              </section>
+                            )}
+                          </Dropzone>
+                        )}
+                        {imageProduk.image2 || imgUrl.image2 ? (
+                          <Box my='5'>{thumbs('image2')}</Box>
+                        ) : (
+                          <Dropzone
+                            onDrop={(file) => handleDrop('image2', file)}
+                            multiple={false}
+                          >
+                            {({ getRootProps, getInputProps }) => (
+                              <section className='container'>
+                                <div
+                                  {...getRootProps({ className: 'dropzone' })}
+                                  className='dropzone'
+                                >
+                                  <input {...getInputProps()} />
+                                  <p>
+                                    Seret 'dan' jatuhkan gambar profile di sini,
+                                    atau klik untuk memilih file
+                                  </p>
+                                </div>
+                              </section>
+                            )}
+                          </Dropzone>
+                        )}
+                        {imageProduk.image3 || imgUrl.image3 ? (
+                          <Box my='5'>{thumbs('image3')}</Box>
+                        ) : (
+                          <Dropzone
+                            onDrop={(file) => handleDrop('image3', file)}
+                            multiple={false}
+                          >
+                            {({ getRootProps, getInputProps }) => (
+                              <section className='container'>
+                                <div
+                                  {...getRootProps({ className: 'dropzone' })}
+                                  className='dropzone'
+                                >
+                                  <input {...getInputProps()} />
+                                  <p>
+                                    Seret 'dan' jatuhkan gambar profile di sini,
+                                    atau klik untuk memilih file
+                                  </p>
+                                </div>
+                              </section>
+                            )}
+                          </Dropzone>
+                        )}
+                      </Box>
+                    </FormControl>
                   </Box>
                 </Box>
               </CardContent>
               <Divider />
               <CardActions sx={{ justifyContent: 'flex-end' }}>
-                <Button variant="contained">
+                <Button
+                  disabled={disableForm()}
+                  onClick={handleSubmit} variant="contained">
                   {formState === 'add' ? 'Tambah' : 'Ubah'} Paket
                 </Button>
               </CardActions>
             </Card>
           </form>
-
         </Container>
+        <ToastMessage
+          open={errMsg.isOpen}
+          status={errMsg.status}
+          message={errMsg.msg}
+          onClose={handleCloseErrMsg}
+        />
       </Box>
     </>
   );

@@ -316,28 +316,6 @@ export const ApiCreateUser = async ({ username, password, nama, nip, unitId }) =
   }
 };
 
-export const ApiUpdateUser = async ({ username, password, nama, nip, unitId, id }) => {
-  const response = await axiosWithToken().put(
-    `${BACKEND_URL}/auth/update-user`, { username, password, nama, nip, unitId, id }
-  )
-    .then((response) => {
-      return response;
-    })
-    .catch((error) => {
-      return error.response;
-    });
-  if (response) {
-    return response;
-  } else {
-    return {
-      status: 500,
-      data: {
-        message: 'Server error. Silakan hubungi admin',
-      },
-    };
-  }
-};
-
 export const ApiDeleteUser = async (id) => {
   const response = await axiosWithToken().delete(
     `${BACKEND_URL}/auth/delete/${id}`
